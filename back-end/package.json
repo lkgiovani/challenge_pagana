@@ -1,0 +1,42 @@
+{
+  "name": "triagem-atendimento-ia-backend",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "ts-node src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "biome lint ./src",
+    "lint:fix": "biome lint --write ./src",
+    "format": "biome format --write ./src",
+    "check": "biome check ./src",
+    "check:fix": "biome check --write ./src"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.2.0",
+    "@google/generative-ai": "^0.24.1",
+    "better-sqlite3": "^12.6.2",
+    "dotenv": "^17.3.1",
+    "fastify": "^5.3.2",
+    "fastify-type-provider-zod": "^6.1.0",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.21",
+    "uuid": "^13.0.0",
+    "ws": "^8.18.1",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.6",
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/node": "^25.3.5",
+    "@types/uuid": "^10.0.0",
+    "@types/ws": "^8.5.14",
+    "@vitest/coverage-v8": "^4.0.18",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2",
+    "vitest": "^4.0.18"
+  }
+}
