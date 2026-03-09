@@ -12,9 +12,10 @@ import { TypingIndicator } from './TypingIndicator'
 
 interface ChatWindowProps {
   conversationId: string
+  mode?: 'cliente' | 'atendente'
 }
 
-export function ChatWindow({ conversationId }: ChatWindowProps) {
+export function ChatWindow({ conversationId, mode = 'cliente' }: ChatWindowProps) {
   const { data: messages, isLoading: messagesLoading } = useMessages(conversationId)
   const { data: conversation } = useConversation(conversationId)
   const sendMessage = useSendMessage()
@@ -25,7 +26,10 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, sendMessage.isPending])
 
-  const isInputDisabled = conversation?.status !== 'bot'
+  const isInputDisabled =
+    mode === 'atendente'
+      ? conversation?.status !== 'in_progress'
+      : conversation?.status === 'transferred'
 
   if (messagesLoading) {
     return (
@@ -55,7 +59,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
               {messages.map(message => (
                 <MessageBubble key={message.id} message={message} />
               ))}
-              {sendMessage.isPending && <TypingIndicator />}
+              {sendMessage.isPending && mode === 'cliente' && <TypingIndicator />}
             </>
           ) : (
             <div className="flex h-full flex-col items-center justify-center py-16 text-center">
@@ -68,12 +72,16 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
         </div>
       </ScrollArea>
 
-      {conversation && conversation.status !== 'bot' && (
+      {mode === 'atendente' && conversation && conversation.status !== 'bot' && (
         <TransferredBanner conversationId={conversationId} status={conversation.status} />
       )}
 
       <div className="sticky bottom-0 mt-auto">
-        <MessageInput conversationId={conversationId} disabled={isInputDisabled} />
+        <MessageInput
+          conversationId={conversationId}
+          disabled={isInputDisabled}
+          sender={mode === 'atendente' ? 'assistant' : 'user'}
+        />
       </div>
     </div>
   )

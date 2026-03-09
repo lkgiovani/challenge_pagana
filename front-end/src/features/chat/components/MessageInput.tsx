@@ -6,9 +6,10 @@ import { useSendMessage } from '../hooks/useSendMessage'
 interface MessageInputProps {
   conversationId: string
   disabled?: boolean
+  sender?: 'user' | 'assistant'
 }
 
-export function MessageInput({ conversationId, disabled }: MessageInputProps) {
+export function MessageInput({ conversationId, disabled, sender = 'user' }: MessageInputProps) {
   const [message, setMessage] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const sendMessage = useSendMessage()
@@ -20,6 +21,7 @@ export function MessageInput({ conversationId, disabled }: MessageInputProps) {
     sendMessage.mutate({
       conversationId,
       message: message.trim(),
+      sender,
     })
     setMessage('')
   }
@@ -46,7 +48,7 @@ export function MessageInput({ conversationId, disabled }: MessageInputProps) {
         value={message}
         onChange={e => setMessage(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder={disabled ? 'Chat desabilitado' : 'Digite sua mensagem...'}
+        placeholder={disabled ? 'Aguardando atendente...' : 'Digite sua mensagem...'}
         disabled={disabled || sendMessage.isPending}
         rows={1}
         className="max-h-30 min-h-10 flex-1 resize-none rounded-lg border border-input bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50"

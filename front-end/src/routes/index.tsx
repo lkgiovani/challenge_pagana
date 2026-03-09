@@ -1,5 +1,5 @@
 import { createRoute, Link } from '@tanstack/react-router'
-import { ArrowRight, BarChart3, Bot, CheckCircle2, Clock, MessageSquare, Shield, Users, Zap } from 'lucide-react'
+import { ArrowRight, BarChart3, Bot, CheckCircle2, Clock, Headset, MessageSquare, Shield, Users, Zap } from 'lucide-react'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { Button } from '@/components/ui/button'
 import { rootRoute } from './__root'
@@ -41,11 +41,17 @@ function LandingPage() {
         <div className="mt-10 flex flex-col gap-4 sm:flex-row">
           <Button size="lg" asChild className="gap-2">
             <Link to="/atendimentos">
-              Acessar Painel
-              <ArrowRight className="h-4 w-4" />
+              <MessageSquare className="h-4 w-4" />
+              Sou Cliente
             </Link>
           </Button>
-          <Button size="lg" variant="outline" asChild>
+          <Button size="lg" variant="outline" asChild className="gap-2">
+            <Link to="/atendente">
+              <Headset className="h-4 w-4" />
+              Sou Atendente
+            </Link>
+          </Button>
+          <Button size="lg" variant="ghost" asChild>
             <a href="#como-funciona">Como Funciona</a>
           </Button>
         </div>
@@ -166,12 +172,21 @@ function LandingPage() {
           <p className="mt-4 text-muted-foreground">
             Acesse o painel de atendimentos e veja o sistema em acao com dados de demonstracao.
           </p>
-          <Button size="lg" className="mt-8 gap-2" asChild>
-            <Link to="/atendimentos">
-              Acessar Painel de Atendimentos
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Button>
+          <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
+            <Button size="lg" className="gap-2" asChild>
+              <Link to="/atendimentos">
+                <MessageSquare className="h-4 w-4" />
+                Painel do Cliente
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" className="gap-2" asChild>
+              <Link to="/atendente">
+                <Headset className="h-4 w-4" />
+                Painel do Atendente
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
 

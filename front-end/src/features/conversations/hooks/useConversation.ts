@@ -10,5 +10,6 @@ export function useConversation(id: string) {
       return data
     },
     enabled: !!id,
+    refetchInterval: 2000,
   })
 }

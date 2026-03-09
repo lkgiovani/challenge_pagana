@@ -34,4 +34,5 @@ export interface CreateConversationPayload {
 export interface SendMessagePayload {
   conversationId: string
   message: string
+  sender?: 'user' | 'assistant'
 }

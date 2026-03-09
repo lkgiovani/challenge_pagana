@@ -10,6 +10,7 @@ export function useSendMessage() {
       const { data } = await api.post<SendMessageResponse>('/messages', {
         conversationId: payload.conversationId,
         message: payload.message,
+        sender: payload.sender,
       })
       return { ...data, conversationId: payload.conversationId }
     },
@@ -23,7 +24,7 @@ export function useSendMessage() {
       const optimisticMessage: Message = {
         id: `temp-${Date.now()}`,
         conversation_id: payload.conversationId,
-        role: 'user',
+        role: payload.sender ?? 'user',
         content: payload.message,
         created_at: new Date().toISOString(),
       }
