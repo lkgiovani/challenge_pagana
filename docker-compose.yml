@@ -1,0 +1,22 @@
+services:
+  backend:
+    build:
+      context: ./back-end
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./front-end
+      args:
+        VITE_API_URL: /api
+        VITE_WS_URL: ws://localhost
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped

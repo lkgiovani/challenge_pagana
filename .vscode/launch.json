@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Backend",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["ts-node", "${workspaceFolder}/back-end/src/server.ts"],
+      "cwd": "${workspaceFolder}/back-end",
+      "envFile": "${workspaceFolder}/back-end/.env",
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}
