@@ -6,12 +6,22 @@ import * as messageRepository from '../repositories/message.repository'
 import type { SendMessageResponse } from '../schemas/message.schema'
 import { broadcast } from '../websocket'
 
-export async function sendMessage(conversationId: string, content: string): Promise<SendMessageResponse> {
+export async function sendMessage(
+  conversationId: string,
+  content: string,
+  sender: 'user' | 'assistant' = 'user',
+): Promise<SendMessageResponse> {
   const conversation = await conversationRepository.findById(conversationId)
   if (!conversation) throw new NotFoundError(`Conversa ${conversationId} não encontrada`)
 
-  if (conversation.status !== 'bot') {
-    throw new ValidationError(`Esta conversa não está mais em triagem automática. Status atual: ${conversation.status}`)
+  if (conversation.status === 'transferred') {
+    throw new ValidationError(`Esta conversa está aguardando um atendente humano. Assuma o atendimento antes de enviar mensagens.`)
+  }
+
+  if (conversation.status === 'in_progress') {
+    const msg = await messageRepository.create(conversationId, sender, content)
+    broadcast('new_message', msg)
+    return { reply: content, intent: null, transfer: false }
   }
 
   const userMessage = await messageRepository.create(conversationId, 'user', content)

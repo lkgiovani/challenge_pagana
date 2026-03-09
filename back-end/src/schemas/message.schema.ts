@@ -14,6 +14,7 @@ export const messageSchema = z.object({
 export const sendMessageBodySchema = z.object({
   conversationId: z.string().uuid(),
   message: z.string().min(1),
+  sender: messageRoleSchema.optional().default('user'),
 })
 
 export const sendMessageResponseSchema = z.object({

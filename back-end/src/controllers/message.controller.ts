@@ -7,8 +7,8 @@ type SendMessageBody = z.infer<typeof sendMessageBodySchema>
 type MessagesParams = z.infer<typeof messagesParamsSchema>
 
 export async function send(request: FastifyRequest<{ Body: SendMessageBody }>, reply: FastifyReply) {
-  const { conversationId, message } = request.body
-  const result = await messageService.sendMessage(conversationId, message)
+  const { conversationId, message, sender } = request.body
+  const result = await messageService.sendMessage(conversationId, message, sender)
   return reply.send(result)
 }
 
