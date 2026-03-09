@@ -60,13 +60,29 @@ describe('messageService.sendMessage', () => {
     await expect(messageService.sendMessage(convId, 'oi')).rejects.toThrow(NotFoundError)
   })
 
-  it('lança ValidationError quando conversa não está em status bot', async () => {
+  it('lança ValidationError quando conversa está em status transferred', async () => {
+    vi.mocked(conversationRepository.findById).mockResolvedValue({
+      ...mockConversationBot,
+      status: 'transferred',
+    } as any)
+
+    await expect(messageService.sendMessage(convId, 'oi')).rejects.toThrow(ValidationError)
+  })
+
+  it('atendente envia mensagem quando conversa está em status in_progress', async () => {
     vi.mocked(conversationRepository.findById).mockResolvedValue({
       ...mockConversationBot,
       status: 'in_progress',
     } as any)
+    vi.mocked(messageRepository.create).mockResolvedValueOnce(mockAssistantMessage as any)
 
-    await expect(messageService.sendMessage(convId, 'oi')).rejects.toThrow(ValidationError)
+    const result = await messageService.sendMessage(convId, 'Olá, como posso ajudar?')
+
+    expect(result.reply).toBe('Olá, como posso ajudar?')
+    expect(result.transfer).toBe(false)
+    expect(result.intent).toBeNull()
+    expect(broadcast).toHaveBeenCalledWith('new_message', mockAssistantMessage)
+    expect(runAgent).not.toHaveBeenCalled()
   })
 
   it('processa mensagem sem transferência', async () => {
